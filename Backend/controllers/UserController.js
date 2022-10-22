@@ -26,18 +26,22 @@ const registerUser = asyncHandler(async (req, res) => {
         name,
         email,
         password: hashedpassword
+
     })
     if (user) {
+        let message = 'User Created Successfully'
         res.status(201).json({
             _id: user._id,
             name: user.name,
             email: user.email,
-            token:generateToken(user._id)
+            token: generateToken(user._id),
+            success: true,
+            message
         })
     } else {
         res.status(400)
         throw new Error('invalid user data')
-    } 
+    }
 })
 
 
@@ -45,42 +49,62 @@ const registerUser = asyncHandler(async (req, res) => {
 //rout get /user
 //access public
 const loginUser = asyncHandler(async (req, res) => {
-    const{email,password}=req.body
+   
+    const { email, password } = req.body
     //check of user email
-    const user=await User.findOne({email})
-    if(user && (await bcrypt.compare(password,user.password))){
-        res.json({
+    const user = await User.findOne({ email }) 
+    if (user && (await bcrypt.compare(password, user.password))) {
+        let message = 'User Login successfull'     
+        res.status(200).json({
             _id: user._id,
             name: user.name,
             email: user.email,
-            token:generateToken(user._id)
+            token: generateToken(user._id),
+            success: true,
+            message
         })
-    }else{
+    } else {
         res.status(400)
-        throw new Error('invalid credentials') 
+        throw new Error('invalid credentials')
     }
 
     // res.json({ message: 'login User' })
 })
+
 //desc user  data
 //rout get /user/me
 //access private
-const  getMe = asyncHandler(async (req, res) => {
-    const {_id,name,email}=await User.findById(req.user.id)
+const getMe = asyncHandler(async (req, res) => {
+    const { _id, name, email } = await User.findById(req.user.id)
     res.status(200).json({
-        _id:_id,
+        _id: _id,
         name,
         email
     })
-}) 
+})
+
+const home=asyncHandler(async(req,res)=>{
+    console.log(req.user,"req.user",req.body,"haiawa87");
+    const user=await User.findById(req.user.id)
+    if(!user){
+        res.status(200).send({message:"user doesnt exist",success:false})
+    }else{
+        res.status(200).send({success:true,
+        data:{ 
+            name:user.email,
+            email:user.email 
+        }})   
+
+    }
+})
 
 //generate jwt
-const generateToken=(id)=>{
-    return jwt.sign({id},process.env.JWT_SECRET,{expiresIn:'30d'})
+const generateToken = (id) => {
+    return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: '30d' })
 }
 
 
 
 module.exports = {
-    registerUser, loginUser, getMe
+    registerUser, loginUser, getMe,home
 }
