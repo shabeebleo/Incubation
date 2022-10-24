@@ -2,7 +2,7 @@
 
 /* *{
   font-family: 'Montserrat', sans-serif;;
-} */ 
+} */
 
 
 /* antd overide */
@@ -22,7 +22,7 @@ input {
   color: white !important;
   max-width: max-content;
   border-top-left-radius: 7px;
-  border-bottom-right-radius:7px;
+  border-bottom-right-radius: 7px;
   margin-left: -55px;
   height: 35px;
 }
@@ -34,7 +34,7 @@ input {
 .card {
   box-shadow: 0 0 6 px gray;
   border-top-left-radius: 13px;
-  border-bottom-right-radius:13px;
+  border-bottom-right-radius: 13px;
 }
 
 /* authentication pages*/
@@ -43,8 +43,27 @@ input {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: rgb(30, 88, 102) ;
- 
+  background-color: rgb(30, 88, 102);
+
+}
+
+.spinner-parent {
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  height: 100%;
+  width: 100% ;
+  opacity: 0.4;
+  background-color: rgba(0, 0, 0, 0.692);
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+}
+.spinner-border{
+  width: 5rem;
+  height: 5rem;
+  color: white !important;
 }
 
 .authentication.card-title {

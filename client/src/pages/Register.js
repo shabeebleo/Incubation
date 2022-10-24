@@ -3,11 +3,17 @@ import { Form, Input,Button } from 'antd'
 import {Link,useNavigate} from 'react-router-dom'
 import axios from "axios"
 import toast from 'react-hot-toast'
+import {  useDispatch } from "react-redux" 
+import { hideLoading, showLoading } from '../redux/alertSlice'
 function Register() {
+    const dispatch = useDispatch()
+
     const navigate =useNavigate()
     const onFinish=async(values)=>{
         try {
+            dispatch(showLoading() )
             const response=await axios.post('/user',values)
+            dispatch(hideLoading() )
             if(response.data.success){
                 toast.success(response.data.message)
                 toast.success("redirecting to login page")
@@ -18,8 +24,8 @@ console.log(response,"responsefffresponse");
                 toast.error(response.data.message)
             }
         } catch (error) {
-            console.log(error);
-            toast.error('something went wrong')
+            dispatch(hideLoading() )
+            toast.error(error.response.data.message)
         }
         console.log("recieved values",values );
     }
