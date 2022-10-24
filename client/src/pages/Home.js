@@ -9,7 +9,7 @@ function Home() {
     const getData = async () => {
 
         try { 
-            console.log("12,home");
+          
             const response = await axois.post('/user/get-user-info-by-id',{},
             
                 {
