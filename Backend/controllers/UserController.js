@@ -86,12 +86,13 @@ const getMe = asyncHandler(async (req, res) => {
 const home=asyncHandler(async(req,res)=>{
     console.log(req.user,"req.user",req.body,"haiawa87");
     const user=await User.findById(req.user.id)
+    console.log(user,"userrrrr  ");
     if(!user){
         res.status(200).send({message:"user doesnt exist",success:false})
     }else{
         res.status(200).send({success:true,
         data:{ 
-            name:user.email,
+            name:user.name,
             email:user.email 
         }})   
 
