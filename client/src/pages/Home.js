@@ -1,5 +1,6 @@
 import React,{useEffect} from 'react'
 import axois from 'axios'
+import Layout from '../components/Layout';
 
 
 
@@ -29,7 +30,9 @@ function Home() {
     }, [])
 
     return (
-        <div>Home</div>
+        <Layout>
+           <h1>Homepage</h1> 
+        </Layout>
     )
 }
 
