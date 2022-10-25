@@ -2,6 +2,7 @@ const jwt = require('jsonwebtoken')
 const bcrypt = require('bcryptjs')
 const asyncHandler = require('express-async-handler')
 const User = require('../models/userModel')
+const Application = require('../models/applyModel')
 
 //desc regisr nw user
 //rout post /user
@@ -49,16 +50,17 @@ const registerUser = asyncHandler(async (req, res) => {
 //rout get /user
 //access public
 const loginUser = asyncHandler(async (req, res) => {
-   
+
     const { email, password } = req.body
     //check of user email
-    const user = await User.findOne({ email }) 
+    const user = await User.findOne({ email })
     if (user && (await bcrypt.compare(password, user.password))) {
-        let message = 'User Login successfull'     
+        let message = 'User Login successfull'
         res.status(200).json({
             _id: user._id,
             name: user.name,
             email: user.email,
+
             token: generateToken(user._id),
             success: true,
             message
@@ -83,22 +85,61 @@ const getMe = asyncHandler(async (req, res) => {
     })
 })
 
-const home=asyncHandler(async(req,res)=>{
-    console.log(req.user,"req.user",req.body,"haiawa87");
-    const user=await User.findById(req.user.id)
-    console.log(user,"userrrrr  ");
-    if(!user){
-        res.status(200).send({message:"user doesnt exist",success:false})
-    }else{
-        res.status(200).send({success:true,
-        data:{ 
-            name:user.name,
-            email:user.email 
-        }})   
+const home = asyncHandler(async (req, res) => {
+    console.log(req.user, "req.user", req.body, "haiawa87");
+    const user = await User.findById(req.user.id)
+    console.log(user, "userrrrr  ");
+    if (!user) {
+        res.status(200).send({ message: "user doesnt exist", success: false })
+    } else {
+        res.status(200).send({
+            success: true,
+            data: {
+                name: user.name,
+                email: user.email,
+                seenNotification: user.seenNotification,
+                unseenNotification: user.unseenNotification,
+                isAdmin: user.isAdmin
+
+            }
+        })
 
     }
 })
+const applyBooking = asyncHandler(async (req, res) => {
+    const userId = req.user._id
+    const userName=req.user.name
+    console.log(req.user,"req.userreq.userreq.user");
+    req.body.userId = userId
+    const applyDetails = req.body
+    const application = await Application.findOne({ userId: req.body.userId })
+    if (application) {
+        res.status(400)
+        throw new Error('already applied')
+    } else {
+        const newApplication = new Application(applyDetails)
+        await newApplication.save()
+        console.log(newApplication, "newApplicationnewApplication");
+        const userAdmin = await User.findOne({ isAdmin: true })
+        const unseenNotification = userAdmin.unseenNotification
+        unseenNotification.push({
+            type:"new-application",
+            message:`${userAdmin.name} has applied`,
+            data:{
+                userId:userId,
+                name:userName,
+                onclickPath:"/admin/Applications"
+            }
+        })
+        await User.findByIdAndUpdate(userAdmin._id,{unseenNotification})
+        return res.status(201).send({
+            success: true,
+            message: "Application successfully applied"
+        })
+    }
+}
 
+)
 //generate jwt
 const generateToken = (id) => {
     return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: '30d' })
@@ -107,5 +148,5 @@ const generateToken = (id) => {
 
 
 module.exports = {
-    registerUser, loginUser, getMe,home
+    registerUser, loginUser, getMe, home, applyBooking
 }
