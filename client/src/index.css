@@ -13,6 +13,12 @@ input {
 }
 
 /* common styling */
+.page-title{
+  font-size: 25px;
+  color: black;
+  font-weight: bold;
+  /* margin-bottom: 20px; */
+}
 .card-title {
   font-size: 1.5rem;
   font-weight: bold;
@@ -85,7 +91,9 @@ label {
 .ant-form-item {
   margin: 10px 0 !important;
 }
-
+.width-input{
+  width: max-content !important
+}
 .primary-button {
   background-color: rgb(53, 118, 134) !important;
   border-radius: 5px !important;
@@ -93,6 +101,7 @@ label {
   width: 100% !important;
   color: white !important;
   font-size: 16px !important;
+  width:max-content 
 }
 
 .anchor {

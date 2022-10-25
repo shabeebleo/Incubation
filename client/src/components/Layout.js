@@ -1,12 +1,16 @@
 import React, { useState } from 'react'
 import '../layout.css'
-import { Link, useLocation,useNavigate  } from 'react-router-dom'
-import { useSelector  } from 'react-redux'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { useSelector ,useDispatch} from 'react-redux'
+import { Badge } from 'antd'
+import  {setUser} from '../redux/userSlice'
 function Layout({ children }) {
     const [collapsed, setcollapsed] = useState(false)
+
     const { user } = useSelector((state) => state.user)
     const location = useLocation()
-    const navigate=useNavigate()
+    const navigate = useNavigate()
+    const Dispatch=useDispatch()
     console.log({ user }, "{ user }{ user }");
     const userMenu = [
         {
@@ -16,8 +20,13 @@ function Layout({ children }) {
 
         },
         {
-            name: 'ADD Applications',
-            path: '/ADD-Applications',
+            name: 'Book',
+            path: '/Application',
+            icon: 'ri-file-list-line'
+
+        }, {
+            name: 'Applications',
+            path: '/Applications',
             icon: 'ri-file-list-line'
 
         }
@@ -78,12 +87,16 @@ function Layout({ children }) {
                                 </div>
                             )
                         })}
-                        <div className={`d-flex menu-item `} onClick={()=>{
+                        <div className={`d-flex menu-item `} onClick={() => {
                             localStorage.clear()
                             navigate('/login')
                         }}>
                             <i className='ri-logout-circle-line'></i>
-                            {!collapsed && < Link to='/login' >Logout</Link>}
+                            {
+
+                            !collapsed && < Link to='/login'onClick={() => { Dispatch(setUser(null) ) }}>Logout</Link>
+
+                            }
                         </div>
                     </div>
                 </div>
@@ -91,8 +104,11 @@ function Layout({ children }) {
                     <div className="header">
                         {collapsed ? <i className="ri-menu-line close-icons" onClick={() => { setcollapsed(false) }}></i> : <i className="ri-close-line close-icons" onClick={() => { setcollapsed(true) }}></i>}
                         <div className="d-flex align-items-center px-4">
-                            <i class="ri-notification-4-line header-icons mr-2 px-3"></i>
-                            <Link className='anchor' to='/profile'>{user?.name}</Link>
+                            <Badge count={user?.unseenNotification.length}>
+                                <i class="ri-notification-4-line header-icons mr-2 px-3"></i>
+                            </Badge>
+
+                            <Link className='anchor mx-3' to='/profile'>{user?.name}</Link>
                         </div>
                     </div>
                     <div className="body">

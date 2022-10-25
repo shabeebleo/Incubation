@@ -84,7 +84,7 @@
     box-shadow: 0 0 2px gray;
     height: 82vh;
     width: 100%;
-    /* padding: 15px; */
+    padding: 15px;
 }
 
 .close-icons {
@@ -92,7 +92,9 @@
     cursor: pointer;
     padding-left: 10px;
 }
-
+.anchor{
+    font-size: large;
+}
 .header-icons {
     font-size: 30px;
     color: black !important;

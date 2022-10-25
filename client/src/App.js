@@ -4,6 +4,8 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Home from './pages/Home'
+import Application from './pages/Application';
+import Applications from './pages/Applications';
 import { Toaster } from "react-hot-toast";
 import { useSelector } from "react-redux"
 import ProtectedRoute from './components/protectedRoutes';
@@ -26,6 +28,9 @@ function App() {
         <Route path='/register' element={<PublicRoute><Register /></PublicRoute>} />
 
         <Route path='/' element={<ProtectedRoute><Home/></ProtectedRoute>} />
+        <Route path='/Application' element={<ProtectedRoute><Application/></ProtectedRoute>} />
+        <Route path='/Applications' element={<ProtectedRoute><Applications/></ProtectedRoute>} />
+ 
       </Routes>
     </BrowserRouter>
   );
